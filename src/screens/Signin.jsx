@@ -1,14 +1,17 @@
 import React, { useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
+import { SIGNIN_START, SIGNIN_FAILE, SIGNIN_SUCCESS } from '../redux/slice/userSlice';
 
 const Signin = () => {
 
     const userNameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
-    const [error,setError] = useState();
-    const [loading, setLoading] = useState();
+    const {loading, error} = useSelector(state => state.user)
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     async function submitHanler(e){
         e.preventDefault();
@@ -20,7 +23,7 @@ const Signin = () => {
                 password : passwordRef.current.value
             };
     
-            setLoading(true);
+            dispatch(SIGNIN_START());
     
             const res = await fetch("/api/auth/Signin",{
                 method : "POST",
@@ -33,20 +36,16 @@ const Signin = () => {
             const data = await res.json();
             
             if(data.success === false){
-                setError(data.message);
-                setLoading(false);
+                dispatch(SIGNIN_FAILE(data.message));
                 return;
             }
     
-            setLoading(false);
-            setError(null);
+            dispatch(SIGNIN_SUCCESS(data))
             navigate("/");
 
         }catch(error){
 
-            setError(error.message);
-            setLoading(false);
-
+            dispatch(SIGNIN_FAILE(error.message));
         }
     }
 
