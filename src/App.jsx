@@ -6,6 +6,7 @@ import About from './screens/About'
 import Profile from './screens/Profile'
 import Header from "./components/Header"
 import PrivateRoute from "./components/PrivateRoute"
+import CreateListing from "./CreateListing"
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path='/about' element = {<About/>} />
         <Route element={<PrivateRoute/>}>
           <Route path='/profile' element = {<Profile/>} />
+          <Route path="/createListing" element = {<CreateListing/>} />
         </Route>
       </Routes>
     </BrowserRouter>
