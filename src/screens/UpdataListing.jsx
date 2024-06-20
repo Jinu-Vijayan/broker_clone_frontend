@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-const CreateListing = () => {
+const updateListing = () => {
   const [files, setFiles] = useState([]);
   const [imageUploadError, setImageUploadError] = useState("");
   const [formData, setFormData] = useState({
@@ -20,6 +20,28 @@ const CreateListing = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(()=>{
+
+    async function fetchListing(){
+
+        const listingId = params.id;
+        
+        const res = await fetch(`/api/listing/get/${listingId}`);
+        const data = await res.json();
+
+        if(data.success === false){
+            return console.log(data.message);
+        }
+
+        setFormData(data.data);
+
+    }
+
+    fetchListing();
+
+  },[])
 
 
   async function handleSubmit(e) {
@@ -29,9 +51,6 @@ const CreateListing = () => {
 
         return setError("You can only upload upto six images");
 
-    } else if(files.length === 0){
-
-        return setError("You have to upload atleast one image");
     } else if (+formData.regularPrice < +formData.discountedPrice){
 
         return setError("Discount price must be less than regular price");
@@ -52,7 +71,7 @@ const CreateListing = () => {
             data.append(key, value);
           }
 
-        const res = await fetch('/api/listing/create',{
+        const res = await fetch(`/api/listing/update/${params.id}`,{
             method : 'POST',
             body : data
         });
@@ -66,7 +85,7 @@ const CreateListing = () => {
         }
 
         setLoading(false);
-        navigate(`/listing/${resposneData.data._id}`)
+        navigate(`/listing/${resposneData.updatedListing._id}`)
 
     }catch(err){
         setError(err.message);
@@ -99,7 +118,7 @@ const CreateListing = () => {
 
   return (
     <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">CreateListing</h1>
+      <h1 className="text-3xl font-semibold text-center my-7">Updata Listing</h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
           <input
@@ -244,7 +263,7 @@ const CreateListing = () => {
           </div>
           <button disabled = {loading} className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
             {
-                loading ? "Creating..." : "Create Listing"
+                loading ? "Updateing..." : "Update Listing"
             }
           </button>
           <p className="text-red-700 text-sm">{error && error}</p>
@@ -254,4 +273,4 @@ const CreateListing = () => {
   );
 };
 
-export default CreateListing;
+export default updateListing;

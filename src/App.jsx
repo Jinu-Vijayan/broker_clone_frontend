@@ -7,6 +7,7 @@ import Profile from './screens/Profile'
 import Header from "./components/Header"
 import PrivateRoute from "./components/PrivateRoute"
 import CreateListing from "./CreateListing"
+import UpdataListing from "./screens/UpdataListing"
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route element={<PrivateRoute/>}>
           <Route path='/profile' element = {<Profile/>} />
           <Route path="/createListing" element = {<CreateListing/>} />
+          <Route path="/updateListing/:id" element = {<UpdataListing/>} />
         </Route>
       </Routes>
     </BrowserRouter>
