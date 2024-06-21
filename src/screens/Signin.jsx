@@ -56,13 +56,13 @@ const Signin = () => {
             <input type='email' placeholder='email' className='border rounded-lg p-3' id='email' ref={emailRef} />
             <input type='password' placeholder='password' className='border rounded-lg p-3' id='password' ref={passwordRef} />
             <button disabled = {loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-85'>
-                {loading ? "loading..." : "Sign up"}
+                {loading ? "loading..." : "Sign in"}
             </button>
         </form>
         <div className='flex gap-2 mt-5'>
             <p>Dont have an account?</p>
             <Link to={'/signup'}>
-                <span className='text-blue-700'>Sign in</span>
+                <span className='text-blue-700'>Sign up</span>
             </Link>
         </div>
         {
